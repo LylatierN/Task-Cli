@@ -18,7 +18,7 @@ def open_file():
     else:
         prog_dict = {}
         save_data(prog_dict)
-    return prog_dict
+    return dict(prog_dict)
 
 def save_data(_data=task_list):
     with open(FILENAME, mode="w", encoding="utf-8") as write_file:
@@ -109,12 +109,13 @@ def show_list(agrs):
         show(task_list)
         return True
     
-    type = args.type
+    _type = args.type
     # create a copy
     tmp = task_list.copy()
-    for key, values in tmp.items():
-        if values['status'] != type:
-            tmp.pop(key)
+    key = list(tmp.keys())
+    for k in key:
+        if tmp[k]['status'] != _type:
+            tmp.pop(k)
     show(tmp)
 
 ####################################
