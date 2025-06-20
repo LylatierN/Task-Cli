@@ -28,12 +28,12 @@ def check_real(id: int):
     return str(id) in task_list
 
 def show(data: dict):
-    print(f'+{"-"*4}+{"-"*30}+{"-"*10}+{"-"*21}+{"-"*21}+')
-    print(f'|{"ID":^4}|{"Task":^30}|{"Status":^10}|{"CreatedAt":^21}|{"CreatedAt":^21}|')
-    print(f'+{"-"*4}+{"-"*30}+{"-"*10}+{"-"*21}+{"-"*21}+')
+    print(f'+{"-"*4}+{"-"*30}+{"-"*12}+{"-"*21}+{"-"*21}+')
+    print(f'|{"ID":^4}|{"Task":^30}|{"Status":^12}|{"CreatedAt":^21}|{"CreatedAt":^21}|')
+    print(f'+{"-"*4}+{"-"*30}+{"-"*12}+{"-"*21}+{"-"*21}+')
     for task in data.values():
-        print(f'|{task["id"]:>4}|{task["task"]:^30}|{task["status"]:^10}|{task["createdAt"]:^21}|{task["updatedAt"]:^21}|')
-    print(f'+{"-"*4}+{"-"*30}+{"-"*10}+{"-"*21}+{"-"*21}+')
+        print(f'|{task["id"]:>4}|{task["task"]:^30}|{task["status"]:^12}|{task["createdAt"]:^21}|{task["updatedAt"]:^21}|')
+    print(f'+{"-"*4}+{"-"*30}+{"-"*12}+{"-"*21}+{"-"*21}+')
 
 
 def add(args):
@@ -74,6 +74,7 @@ def delete(args):
     amount = len(task_list)
     for i in range(removed, amount):
         task_list[str(i)] = task_list[str(i + 1)]
+        task_list[str(i)]['id'] = i
         
     del task_list[str(amount)]
 
@@ -124,37 +125,37 @@ def main():
     global task_list, args
     task_list = open_file()
 
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="Task manager")
     subparser = parser.add_subparsers(dest='command')
 
     # add
-    add_parser = subparser.add_parser("add")
+    add_parser = subparser.add_parser("add", description="add a task with small description")
     add_parser.add_argument("task")
     add_parser.set_defaults(func=add)
 
     # update
-    update_parser = subparser.add_parser("update")
+    update_parser = subparser.add_parser("update", description="update the task deteail by chosing from yhe task's id")
     update_parser.add_argument("id", type=int)
     update_parser.add_argument("task")
     update_parser.set_defaults(func=update)
 
     # delete
-    delete_parser = subparser.add_parser("delete")
+    delete_parser = subparser.add_parser("delete", description="delete task by id")
     delete_parser.add_argument("id", type=int)
     delete_parser.set_defaults(func=delete)
 
     # mark in process
-    markprocess_parser = subparser.add_parser("mark-in-process")
+    markprocess_parser = subparser.add_parser("mark-in-process", description="change the task status into in-process")
     markprocess_parser.add_argument("id", type=int)
     markprocess_parser.set_defaults(func=mark)
 
     # mark done
-    markdone_parser = subparser.add_parser("mark-done")
+    markdone_parser = subparser.add_parser("mark-done", description="change the task status into done")
     markdone_parser.add_argument("id", type=int)
     markdone_parser.set_defaults(func=mark)
 
     # show list
-    list_parser = subparser.add_parser("list")
+    list_parser = subparser.add_parser("list", description="show the list of tasks: 'all', 'todo', 'done', 'in-progress'.")
     list_parser.add_argument("type", choices=['all', 'todo', 'done', 'in-progress'], default='all', nargs='?')
     list_parser.set_defaults(func=show_list)
 
